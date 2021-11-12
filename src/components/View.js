@@ -1,19 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-
+import articleService from '../services/articleServices';
 import Article from './Article';
 import EditForm from './EditForm';
+import { useHistory } from 'react-router-dom';
+
+import  axiosWithAuth  from '../utils/axiosWithAuth';
 
 const View = (props) => {
     const [articles, setArticles] = useState([]);
     const [editing, setEditing] = useState(false);
     const [editId, setEditId] = useState();
 
+
+   
+
+    useEffect(() => {
+        axiosWithAuth()
+        .get('http://localhost:5000/api/articles')
+        .then(resp => {
+            setArticles(resp.data);
+        })
+    }, [])
+    
+
+
+
     const handleDelete = (id) => {
+        axiosWithAuth()
+        .delete(`http://localhost:5000/api/articles/${id}`)
+        .then(resp => {
+            setArticles(resp.data)
+            push('/articles')
+        })
+        .catch(error => {
+            console.log(error.resp)
+        })
     }
 
+
+
+
     const handleEdit = (article) => {
+        axiosWithAuth()
+        .put(`http://localhost:5000/api/articles/${editId}`, article)
+        .then(resp => {
+            setEditing(false)
+            setArticles(resp.data)
+        })
+        .catch(error => {
+            console.log(error.resp)
+        })
     }
+
+
 
     const handleEditSelect = (id)=> {
         setEditing(true);
@@ -23,6 +63,12 @@ const View = (props) => {
     const handleEditCancel = ()=>{
         setEditing(false);
     }
+
+ 
+        
+    
+
+    
 
     return(<ComponentContainer>
         <HeaderContainer>View Articles</HeaderContainer>

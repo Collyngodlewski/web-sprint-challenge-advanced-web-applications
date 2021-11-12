@@ -1,6 +1,14 @@
-
+import axiosWithAuth from "../utils/axiosWithAuth"
+import { useState } from "react"
 
 const articleService = ()=> {
+    const [articles, setArticles] = useState([])
+    axiosWithAuth()
+    .get(`http://localhost:5000/api/articles/`)
+    .then(res => {
+     setArticles(res.data)
+    })
+    .catch(err => console.log(err))
 }
 
 export default articleService;

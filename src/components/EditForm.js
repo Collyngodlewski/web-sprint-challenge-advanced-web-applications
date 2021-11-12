@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-
+import axios from 'axios';
 const initialArticle = {
     id:"",
     headline: "",
@@ -28,8 +28,16 @@ const EditForm = (props)=> {
 
     const handleCancel = (e) => {
         e.preventDefault();
-        handleEditCancel();
-    }
+        handleEditCancel(
+        axios.put(`http://localhost:5000/api/articles/${editId}`, article)
+      .then(res => {
+        props.setArticle(res.data)
+        props.history.push(`/article/${editId}`)
+
+      })
+      .catch(err => console.log(err))
+      )};
+
 
     return(<FormContainer onSubmit={handleSubmit}>
         <h3>Edit Article</h3>
