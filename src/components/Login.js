@@ -28,7 +28,6 @@ const Login = () => {
             })
             .catch(err => {
                 setError("Invalid Username or Password");
-                console.error(err.message);
             })
     }
 
